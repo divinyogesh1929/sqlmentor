@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQLMentor — SQL from Zero to Job-Ready</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── SIDEBAR ─────────────────────────────────────────── -->
+    <aside id="sidebar">
+      <div class="sidebar-top">
+        <div class="logo">
+          <span class="logo-icon">▶</span>
+          <span class="logo-text">SQL<em>Mentor</em></span>
+        </div>
+        <div class="global-progress">
+          <div class="gp-label">
+            <span id="completedCount">0</span> / 14 days
+          </div>
+          <div class="gp-bar"><div id="globalBar" class="gp-fill"></div></div>
+        </div>
+      </div>
+
+      <div class="phase-group" id="dayList">
+        <!-- Populated by JS -->
+      </div>
+
+      <div class="sidebar-bottom">
+        <button id="themeToggle" class="icon-btn" title="Toggle theme">
+          <span id="themeIcon">☀</span>
+        </button>
+        <button class="icon-btn" id="historyBtn" title="Query history">⧖</button>
+        <button class="icon-btn" id="schemaBtn" title="Database schema">⊞</button>
+      </div>
+    </aside>
+
+    <!-- ── MAIN CONTENT ───────────────────────────────────── -->
+    <div id="mainWrap">
+
+      <!-- Top bar -->
+      <header id="topbar">
+        <div id="breadcrumb">
+          <span id="bcDay">Day 1</span>
+          <span class="bc-sep">›</span>
+          <span id="bcTitle">SELECT &amp; FROM</span>
+        </div>
+        <div class="topbar-right">
+          <div class="streak-badge" id="streakBadge">
+            <span class="streak-flame">🔥</span>
+            <span id="streakCount">0</span> day streak
+          </div>
+          <div class="xp-badge" id="xpBadge">
+            <span>⚡</span><span id="xpCount">0</span> XP
+          </div>
+        </div>
+      </header>
+
+      <!-- Main scrollable area -->
+      <main id="main">
+
+        <!-- DASHBOARD VIEW -->
+        <section id="dashView">
+          <div class="dash-hero">
+            <h1>Master SQL in <span class="accent">14 Days</span></h1>
+            <p class="dash-sub">Write real queries. Analyze real data. Get job-ready.</p>
+            <div class="dash-stats">
+              <div class="stat-card"><span class="stat-num" id="ds-done">0</span><span class="stat-label">Days Done</span></div>
+              <div class="stat-card"><span class="stat-num" id="ds-xp">0</span><span class="stat-label">XP Earned</span></div>
+              <div class="stat-card"><span class="stat-num" id="ds-solved">0</span><span class="stat-label">Problems Solved</span></div>
+              <div class="stat-card"><span class="stat-num" id="ds-streak">0</span><span class="stat-label">Day Streak</span></div>
+            </div>
+          </div>
+          <div class="dash-grid" id="dashGrid"></div>
+        </section>
+
+        <!-- LESSON VIEW -->
+        <section id="lessonView" style="display:none">
+
+          <!-- Lesson header -->
+          <div class="lesson-header" id="lessonHeader"></div>
+
+          <!-- Concept panels -->
+          <div id="conceptPanel"></div>
+
+          <!-- Exercise area -->
+          <div class="ex-section">
+            <div class="ex-top-bar">
+              <div class="ex-tabs" id="exTabs"></div>
+              <div class="ex-meta" id="exMeta"></div>
+            </div>
+
+            <!-- Split: problem + editor -->
+            <div class="split-pane">
+
+              <!-- LEFT: problem description -->
+              <div class="problem-pane" id="problemPane">
+                <div class="problem-content" id="problemContent"></div>
+              </div>
+
+              <!-- RIGHT: editor + output -->
+              <div class="editor-pane">
+                <div class="editor-toolbar">
+                  <span class="editor-label">SQL Editor</span>
+                  <div class="editor-actions">
+                    <button class="btn-icon" id="clearBtn" title="Clear editor">✕</button>
+                    <button class="btn-icon" id="copyBtn" title="Copy query">⎘</button>
+                  </div>
+                </div>
+                <div class="editor-wrap" id="editorWrap">
+                  <textarea id="sqlEditor" spellcheck="false" placeholder="-- Write your SQL query here
+SELECT * FROM customers;"></textarea>
+                  <div class="line-numbers" id="lineNumbers">1</div>
+                </div>
+                <div class="editor-btns">
+                  <button class="btn-run" id="runBtn">▶ Run Query</button>
+                  <button class="btn-check" id="checkBtn">✓ Check Answer</button>
+                  <button class="btn-hint" id="hintBtn">? Hint</button>
+                  <button class="btn-sol" id="solutionBtn">⊙ Solution</button>
+                </div>
+
+                <!-- Output area -->
+                <div class="output-area" id="outputArea">
+                  <div class="output-placeholder">
+                    <span class="ph-icon">▷</span>
+                    <span>Run a query to see results</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation -->
+          <div class="lesson-nav">
+            <button class="btn-nav" id="prevDayBtn">← Previous</button>
+            <div id="dayDots"></div>
+            <button class="btn-nav primary" id="nextDayBtn">Next Day →</button>
+          </div>
+
+        </section>
+      </main>
+    </div>
+
+    <!-- ── OVERLAYS ────────────────────────────────────────── -->
+
+    <!-- Schema modal -->
+    <div class="modal-overlay" id="schemaModal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span>Database Schema</span>
+          <button class="modal-close" onclick="closeModal('schemaModal')">✕</button>
+        </div>
+        <div class="modal-body" id="schemaBody"></div>
+      </div>
+    </div>
+
+    <!-- History modal -->
+    <div class="modal-overlay" id="historyModal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span>Query History</span>
+          <button class="modal-close" onclick="closeModal('historyModal')">✕</button>
+        </div>
+        <div class="modal-body" id="historyBody"></div>
+      </div>
+    </div>
+
+    <!-- Toast notifications -->
+    <div id="toastContainer"></div>
+
+    <!-- Confetti canvas -->
+    <canvas id="confettiCanvas"></canvas>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/alasql/0.6.5/alasql.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
