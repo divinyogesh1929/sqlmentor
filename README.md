@@ -15,7 +15,7 @@
 1. Create a new GitHub repo
 2. Upload ALL 4 files (including alasql.min.js)
 3. Settings → Pages → main branch, root /
-4. URL: https://yourusername.github.io/sqlmentor
+4. URL: https://divinyogesh1929.github.io/sqlmentor
 
 ## Keyboard Shortcuts
 - Ctrl+Enter  → Run query
